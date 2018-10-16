@@ -4,12 +4,11 @@ const m_user = require('../models/m_user');
 const showSignin = function(req,res){
     res.render('signin.html');
 }
+// 处理用户登录表单数据
 const handleSignin = function(req,res){
     // 1、接收前台传入的数据
     const body = req.body;
-    console.log(body);
     // 验证邮箱
-    
     m_user.checkEmail(body.email,(err,data)=>{
         if(err){
             return res.send({
@@ -31,15 +30,21 @@ const handleSignin = function(req,res){
                 message: '密码错误'
             });
         }
+        // 使用express-session将用户信息保存
+        req.session.user = data[0];
         res.send({
             code:200,
             message:'可以跳转了'
         })
-        // 邮箱和密码正确，页面跳转到话题页
-        // res.redirect('/');
     })
+}
+// 处理用户退出
+const handleSignout = function(req,res){
+    delete req.session.user;
+    res.redirect('/signin');
 }
 module.exports = {
     showSignin,
-    handleSignin
+    handleSignin,
+    handleSignout
 }
