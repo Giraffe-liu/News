@@ -43,8 +43,62 @@ const handleSignout = function(req,res){
     delete req.session.user;
     res.redirect('/signin');
 }
+// 渲染注册页面
+const showSignup = function(req,res){
+    res.render('signup.html');
+}
+// 处理注册页面表单请求
+const handleSignup = function(req,res){
+    const body = req.body;
+    // 验证邮箱
+    m_user.checkEmail(body.email,(err,data)=>{
+        if(err){
+           return res.send({
+                code:500,
+                message:'服务器错误'
+            })
+        }
+        if(data[0]){
+           return res.send({
+                code:1,
+                message:'邮箱已存在，请重新输入'
+            })
+        }
+        // 验证昵称
+        m_user.checkNickname(body.nickname, (err, data) => {
+            if(err){
+               return res.send({
+                    code:500,
+                    message:'服务器错误'
+                })
+            }
+            if(data[0]){
+               return res.send({
+                    code:2,
+                    message:'昵称已存在，换一个吧'
+                })
+            }
+            // 添加新用户
+            m_user.addUser(body,(err,data)=>{
+                if(err){
+                   return res.send({
+                        code:500,
+                        message:'服务器错误'
+                    })
+                }
+                res.send({
+                    code:200,
+                    message:'添加成功'
+                })
+            }) 
+        })
+    })
+    
+}
 module.exports = {
     showSignin,
     handleSignin,
-    handleSignout
+    handleSignout,
+    showSignup,
+    handleSignup
 }

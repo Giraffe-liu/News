@@ -11,6 +11,27 @@ const checkEmail = function(email,callback){
         callback(null,data);
     })
 }
+// 验证昵称
+const checkNickname = function(nickname,callback){
+    const sql = 'select * from `users` where nickname=?'
+    db.query(sql,nickname,(err,data)=>{
+        if(err){
+            return callback(err)
+        }
+        callback(null,data);
+    })
+}
+const addUser = function(body,callback){
+    const sql = 'INSERT INTO `users` SET ?'
+    db.query(sql,body,(err,data)=>{
+        if(err){
+            return callback(err)
+        }
+        callback(null,data)
+    })
+}
 module.exports = {
-    checkEmail
+    checkEmail,
+    checkNickname,
+    addUser
 }

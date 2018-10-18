@@ -25,4 +25,8 @@ router.get('/topic/:topicId/edit',c_topic.showEdit)
 router.post('/topic/:topicId',c_topic.handleEdit)
 // 删除话题
 router.get('/topic/:topicId/delete',c_topic.deleteTopic);
+// 渲染注册页面
+router.get('/signup',c_user.showSignup);
+// 处理注册页面的表单请求
+router.post('/signup',c_user.handleSignup);
 module.exports = router;
