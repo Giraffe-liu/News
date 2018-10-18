@@ -19,4 +19,10 @@ router.post('/createTopic',c_topic.handleTopic)
 router.get('/signout', c_user.handleSignout)
 //话题详情页
 router.get('/topic/:topicId', c_topic.showDetile)
+//渲染编辑按钮
+router.get('/topic/:topicId/edit',c_topic.showEdit)
+//修改编辑页面的数据
+router.post('/topic/:topicId',c_topic.handleEdit)
+// 删除话题
+router.get('/topic/:topicId/delete',c_topic.deleteTopic);
 module.exports = router;

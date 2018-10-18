@@ -46,10 +46,8 @@ const handleTopic = function(req,res){
         })
     })
 }
-
 // 展示话题详情页
 const showDetile = function(req,res){
-    res.render('topic/show.html');
     // req中自带params属性，可以获取到地址中的参数
     const topicId = req.params.topicId;
     m_topic.findIdTopic(topicId,(err,data)=>{
@@ -59,14 +57,69 @@ const showDetile = function(req,res){
                 message:'服务器错误'
             })
         }
+        // console.log(data[0]);
         res.render('topic/show.html',{
+            list:data[0],
+            sessionUserId:req.session.user.id
+        });
+    })
+}
+// 渲染话题编辑页
+const showEdit = function(req,res){
+    const id = req.params.topicId;
+    m_topic.findIdTopic(id,(err,data)=>{
+        if(err){
+            res.send({
+                code:500,
+                message:'服务器错误'
+            })
+        }
+        res.render('topic/edit.html',{
             list:data[0]
         });
+    })
+    
+}
+// 处理话题编辑页
+const handleEdit = function(req,res){
+    //获取数据
+    const body = req.body;
+    const topicId = req.params.topicId;
+    m_topic.editTopic(body,topicId,(err,data)=>{
+        if(err){
+            res.send({
+                code: 500,
+                message: '服务器错误'
+            })
+        }
+        res.send({
+            code:200,
+            message:'编辑成功'
+        })
+    })
+}
+// 删除话题
+const deleteTopic = function(req,res){
+    const topicId = req.params.topicId;
+    m_topic.deleteTopic(topicId,(err,data)=>{
+        if(err){
+            res.send({
+                code:500,
+                message:'服务器错误'
+            })
+        }
+        res.send({
+            code:200,
+            message:'删除成功'
+        })
     })
 }
 module.exports = {
     showTopic,
     createTopic,
     handleTopic,
-    showDetile
+    showDetile,
+    showEdit,
+    handleEdit,
+    deleteTopic
 }
